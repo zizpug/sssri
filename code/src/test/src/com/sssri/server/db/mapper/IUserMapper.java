@@ -11,14 +11,14 @@ import com.sssri.server.db.model.User;
 public interface IUserMapper {
 	
 	/**
-	 * 根据用户id查询用户信息
-	 * @param id
+	 * 根据用户工号查询用户信息
+	 * @param employee_id
 	 * @return
 	 */
-	@Select("select * from user where id = #{id}")
-	public User selectUserByID(int id);
+	@Select("select * from tb_user where employee_id = #{employee_id}")
+	public User selectUserByID(int employee_id);
 	
-	@Select("select * from user where userid = #{userid}")
+	@Select("select * from tb_user where userid = #{userid}")
 	public User selectUserByUserid(String userid);
 	
 	/**
@@ -26,7 +26,7 @@ public interface IUserMapper {
 	 * @param name
 	 * @return
 	 */
-	@Select("select * from user where userid like #{name}")
+	@Select("select * from tb_user where userid like #{name}")
 	public User selectUserByName(String name);
 	
 	/**
@@ -34,7 +34,7 @@ public interface IUserMapper {
 	 * @param name
 	 * @return
 	 */
-	@Select("select * from user where id=#{id} and userName=#{userName}")
+	@Select("select * from tb_user where Employee=#{employee_id} and userName=#{userName}")
 	public User selectUser(User user);
 	
 }

@@ -26,8 +26,6 @@ public class ClientAccessFilter implements Filter {
 	
 	private ILoginStateChecker clientLoginHandler = null;
 	
-	private boolean IS_DB_INITED = false;
-	
 	/**
 	 * 需要拦截的URL的通配规则
 	 */
@@ -59,71 +57,52 @@ public class ClientAccessFilter implements Filter {
 			hResponse.setCharacterEncoding(encoding);
 		}
 		
-		//初始化数据库记录token，微信用户等信息
-		if(IS_DB_INITED == false){
-			
-		}
-		
-		boolean isMobile = checkMobile(hRequest.getHeader("User-Agent"));
-		if(this.clientLoginHandler!=null && isMobile){
-			handleClientRequest(hRequest, hResponse, chain);
+		String servletPath = hRequest.getServletPath();
+		boolean isUserLogin = isLogin(hRequest);
+		if(servletPath.endsWith(".html") || servletPath.endsWith(".htm") || servletPath.endsWith(".jsp")){
+			boolean isLoginPage = servletPath.endsWith("/Login.jsp") || servletPath.endsWith("/login.html");
+			if(isLoginPage){
+				chain.doFilter(hRequest, hResponse);
+			} else if (isUserLogin) {
+				chain.doFilter(hRequest, hResponse);
+			} else {
+				hResponse.sendRedirect("Login.jsp");
+			}
+		} else if(servletPath.startsWith("/resource/")){
+			chain.doFilter(hRequest, hResponse);
+		} else if(servletPath.startsWith("/rest")){
+			boolean isLoginRequest = servletPath.equalsIgnoreCase("/rest/user/login");
+			if(isLoginRequest){
+				chain.doFilter(hRequest, hResponse);
+			} else if (isUserLogin) {
+				chain.doFilter(hRequest, hResponse);
+			} else {
+				hResponse.sendRedirect("Login.jsp");
+			}
 		} else {
-//			//PC请求，判断用户登录状态
-//			HttpSession session = hRequest.getSession();
-//			String requestURI = hRequest.getServletPath();
-//			
-//			
-//				if (session == null) {
-//					hResponse.sendRedirect("index.html");
-//					return;
-//				} else {
-//					Object user = session.getAttribute("login_user");
-//					if (user == null || user.toString().trim().equals("")) {
-//						if (requestURI.equals("/login.html")||hRequest.getServletPath().startsWith("resource")) {
-//							chain.doFilter(hRequest, hResponse);
-//							return;
-//						} else {
-//							hResponse.sendRedirect("index.html");
-//							return;
-//						}
-//					}
-//				} 
-//			
 			chain.doFilter(hRequest, hResponse);
 		}
 	}
 	
 	/**
-	 * 处理移动端请求
+	 * 判断用户是否登陆
 	 * @param request
-	 * @param response
-	 * @param chain
-	 * @throws ServletException
-	 * @throws IOException
+	 * @return
 	 */
-	private void handleClientRequest(HttpServletRequest request, HttpServletResponse response, FilterChain chain) 
-			throws ServletException, IOException{
-		chain.doFilter(request, response);
-	}
-	
-	protected boolean checkMobile(String agentHeader){
-		//目前我们只支持安卓和苹果设备
-		//ATTENTION 需要判断是手机浏览器还是客户端
-		if(agentHeader.contains("android") || agentHeader.contains("Android")){
-			return true;
+	protected boolean isLogin(HttpServletRequest request){
+		HttpSession session = request.getSession(false);
+		if(session==null){
+			return false;
 		}
-		if(agentHeader.contains("iPhone") || agentHeader.contains("iphone")|| agentHeader.contains("iPad") || agentHeader.contains("ipad")){
-			return true;
+		long timeDiff = System.currentTimeMillis() - session.getCreationTime();
+		if(timeDiff/100 > (session.getMaxInactiveInterval() + 60)){
+			return false;
 		}
-		return false;
-	}
-	
-	protected boolean isInIncludes(String servletPath){
+		Object userid = session.getAttribute("login_user");
+		if(userid==null || userid.toString().trim().length()<=0){
+			return false;
+		}
 		return true;
-	}
-
-	protected boolean isInExcludes(String servletPath){
-		return false;
 	}
 	
 	/**
@@ -186,6 +165,10 @@ public class ClientAccessFilter implements Filter {
 	 */
 	public void setEXCLUDE_PATTERN(String[] eXCLUDE_PATTERN) {
 		EXCLUDE_PATTERN = eXCLUDE_PATTERN;
+	}
+
+	public ILoginStateChecker getClientLoginHandler() {
+		return clientLoginHandler;
 	}
 
 }

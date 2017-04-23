@@ -17,7 +17,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
  */
 public class DatabaseUtils {
 
-	public static final String MYBATIS_CONFIGURATION_FILE = "D:/workspace/test/WebContent/WEB-INF/mysql_datasource.xml";
+	public static final String MYBATIS_CONFIGURATION_FILE = "D:/github/sssri/code/src/test/WebContent/WEB-INF/mysql_datasource.xml";
 	
 	private static SqlSessionFactory sessionFactory = null;
 	

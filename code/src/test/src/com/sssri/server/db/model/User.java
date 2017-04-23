@@ -7,44 +7,76 @@ package com.sssri.server.db.model;
  *
  */
 public class User {
-
-	private int id;
-
-	private String name;
-
-	private String userid;
+//	 `Employee_id` varchar(20) NOT NULL,
+//	  `Pwd` varchar(20) DEFAULT NULL,
+//	  `User_type` int(11) DEFAULT NULL,
+//	  `User_code` int(11) DEFAULT NULL,
+//	  `Sex` varchar(10) DEFAULT NULL,
+//	  `Name` varchar(20) DEFAULT NULL,
+//	  `Department` varchar(20) DEFAULT NULL,
+//	  `Online` int(11) DEFAULT NULL,
+//	  `Timekeeping` varchar(20) DEFAULT NULL,
+//	  `User_position` int(11) DEFAULT NULL,
+//	  PRIMARY KEY (`Employee_id`)
+//	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	private String Emplyee_id;
 
 	private String password;
 
-	private int userAge;
+	private int user_type;
 
-	private String userAddress;
+	private int user_code;
 
-	public User() {
+	private String sex;
+
+	private String name;
+	
+	private String department;
+	
+	private int online_time;
+	
+	private String timekeeping;
+	
+	private int user_position;
+
+	public String getEmplyee_id() {
+		return Emplyee_id;
 	}
 
-	public int getId() {
-		return id;
+	public void setEmplyee_id(String emplyee_id) {
+		Emplyee_id = emplyee_id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public String getPassword() {
+		return password;
 	}
 
-	public int getUserAge() {
-		return userAge;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	public void setUserAge(int userAge) {
-		this.userAge = userAge;
+	public int getUser_type() {
+		return user_type;
 	}
 
-	public String getUserAddress() {
-		return userAddress;
+	public void setUser_type(int user_type) {
+		this.user_type = user_type;
 	}
 
-	public void setUserAddress(String userAddress) {
-		this.userAddress = userAddress;
+	public int getUser_code() {
+		return user_code;
+	}
+
+	public void setUser_code(int user_code) {
+		this.user_code = user_code;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
 	}
 
 	public String getName() {
@@ -55,20 +87,36 @@ public class User {
 		this.name = name;
 	}
 
-	public String getUserid() {
-		return userid;
+	public String getDepartment() {
+		return department;
 	}
 
-	public void setUserid(String userid) {
-		this.userid = userid;
+	public void setDepartment(String department) {
+		this.department = department;
 	}
 
-	public String getPassword() {
-		return password;
+	public int getOnline_time() {
+		return online_time;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setOnline_time(int online_time) {
+		this.online_time = online_time;
+	}
+
+	public String getTimekeeping() {
+		return timekeeping;
+	}
+
+	public void setTimekeeping(String timekeeping) {
+		this.timekeeping = timekeeping;
+	}
+
+	public int getUser_position() {
+		return user_position;
+	}
+
+	public void setUser_position(int user_position) {
+		this.user_position = user_position;
 	}
 
 }

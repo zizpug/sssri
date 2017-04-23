@@ -56,7 +56,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<input type="text" class="text" name="Uemail" placeholder="工号"><br>
 						<input type="password" class="text" name="Upassword" placeholder="密码">	
 						<div class="clearfix"> </div>
-						<input type="submit"value="登录" onClick="window.location.href='index_Logined.jsp'">
+						<input type="submit"value="登录" onClick="do_Login">
 						<input type="button" value="管理员登陆" onClick="window.location.href='AdminLogin.jsp'">
 				</div>
 				</div>
@@ -71,4 +71,30 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 </div>
 <!--login strip end here-->
 </body>
+<script type="text/javascript">
+function doLogin(){
+	var name = document.getElementById("accountControl").value;
+	var pwd = document.getElementById("passwordControl").value;
+	$.ajax({
+        cache: true,
+        type: "POST",
+        dataType: "json",
+        url: "rest/user/login",
+        data:{"userid":name, "password":pwd},
+        async: true,
+        error: function(request) {
+            alert("Connection error");
+        },
+        success: function(data) {
+        	if(data==false || data=='false' ){
+            	alert("用户名、密码不正确");
+            } else {
+            	window.sessionStorage.setItem('login_user', name);
+            	window.location = 'index_Logined.jsp';
+            }
+        }
+    });
+}
+
+</script>
 </html>
