@@ -15,7 +15,7 @@ public interface IUserMapper {
 	 * @param employee_id
 	 * @return
 	 */
-	@Select("select * from tb_user where employee_id = #{employee_id}")
+	@Select("select * from tb_user where Employee_id = #{employee_id}")
 	public User selectUserByID(int employee_id);
 	
 	@Select("select * from tb_user where userid = #{userid}")

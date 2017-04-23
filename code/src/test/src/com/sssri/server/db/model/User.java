@@ -1,7 +1,7 @@
 package com.sssri.server.db.model;
 
 /**
- * 用户表java模型
+ * 用户表模型
  * 
  * @author xmj
  *
@@ -19,9 +19,9 @@ public class User {
 //	  `User_position` int(11) DEFAULT NULL,
 //	  PRIMARY KEY (`Employee_id`)
 //	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-	private String Emplyee_id;
+	private String Employee_id;
 
-	private String password;
+	private String Pwd;
 
 	private int user_type;
 
@@ -40,19 +40,19 @@ public class User {
 	private int user_position;
 
 	public String getEmplyee_id() {
-		return Emplyee_id;
+		return Employee_id;
 	}
 
-	public void setEmplyee_id(String emplyee_id) {
-		Emplyee_id = emplyee_id;
+	public void setEmplyee_id(String employee_id) {
+		Employee_id = employee_id;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getPwd() {
+		return Pwd;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPsd(String Pwd) {
+		this.Pwd = Pwd;
 	}
 
 	public int getUser_type() {
@@ -119,4 +119,5 @@ public class User {
 		this.user_position = user_position;
 	}
 
+	
 }

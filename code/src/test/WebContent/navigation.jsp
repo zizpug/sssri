@@ -39,7 +39,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						function fun(){
 							if(confirm("是否退出系统？")){
 			    				alert("已退出!");
-			    				location.href=("Login.jsp");
+			    				$.ajax({
+			    			        cache: true,
+			    			        type: "Get",
+			    			        dataType: "json",
+			    			        url: "rest/user/logout",
+			    			        async: true,
+			    			        error: function(errCode, errMsg) {
+			    			            alert("Connection error: "+errCode);
+			    			        },
+			    			        success: function(data) {
+			    			        	location.href=("login.jsp");
+			    			        }
+			    			    });
+			    				//location.href=("/rest/logout");
 			    			}
 			   		 	}	
 					</script>

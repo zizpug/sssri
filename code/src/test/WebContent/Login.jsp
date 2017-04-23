@@ -53,10 +53,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<div class="contact-info">
 				<div class="login">
 					<h3>请登录您的账号</h3>
-						<input type="text" class="text" name="Uemail" placeholder="工号"><br>
-						<input type="password" class="text" name="Upassword" placeholder="密码">	
+						<input id="accountControl" type="text" class="text" name="Uemail" placeholder="工号"><br>
+						<input id="passwordControl" type="password" class="text" name="Upassword" placeholder="密码">	
 						<div class="clearfix"> </div>
-						<input type="submit"value="登录" onClick="do_Login">
+						<input type="submit"value="登录" onClick="doLogin()">
 						<input type="button" value="管理员登陆" onClick="window.location.href='AdminLogin.jsp'">
 				</div>
 				</div>
@@ -82,8 +82,8 @@ function doLogin(){
         url: "rest/user/login",
         data:{"userid":name, "password":pwd},
         async: true,
-        error: function(request) {
-            alert("Connection error");
+        error: function(errCode, errMsg) {
+            alert("Connection error: "+errCode);
         },
         success: function(data) {
         	if(data==false || data=='false' ){

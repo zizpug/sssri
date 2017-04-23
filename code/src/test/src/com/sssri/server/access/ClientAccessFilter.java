@@ -45,38 +45,41 @@ public class ClientAccessFilter implements Filter {
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) //登陆访问限制
 			throws IOException, ServletException {
 		
 		HttpServletRequest hRequest = (HttpServletRequest) request;
 		HttpServletResponse hResponse = (HttpServletResponse) response;
 		
-		String encoding = config.getInitParameter("encoding");
+		String encoding = config.getInitParameter("encoding");//防止编码乱码
 		if(StringUtils.isNotBlank(encoding)){
 			hRequest.setCharacterEncoding(encoding);
 			hResponse.setCharacterEncoding(encoding);
 		}
 		
-		String servletPath = hRequest.getServletPath();
-		boolean isUserLogin = isLogin(hRequest);
+		String appName = hRequest.getContextPath();
+		String servletPath = hRequest.getRequestURI();
+		servletPath = servletPath.substring(appName.length());
+		
+		boolean isUserLogin = isLogin(hRequest);//判断是否登陆
 		if(servletPath.endsWith(".html") || servletPath.endsWith(".htm") || servletPath.endsWith(".jsp")){
 			boolean isLoginPage = servletPath.endsWith("/Login.jsp") || servletPath.endsWith("/login.html");
-			if(isLoginPage){
+			if(isLoginPage){//登陆页面
 				chain.doFilter(hRequest, hResponse);
-			} else if (isUserLogin) {
+			} else if (isUserLogin) {//已经登陆
 				chain.doFilter(hRequest, hResponse);
-			} else {
+			} else {//其他
 				hResponse.sendRedirect("Login.jsp");
-			}
-		} else if(servletPath.startsWith("/resource/")){
+			}//后缀为html，jsp
+		} else if(servletPath.startsWith("/resource/")){//资源路径放行
 			chain.doFilter(hRequest, hResponse);
-		} else if(servletPath.startsWith("/rest")){
+		} else if(servletPath.startsWith("/rest")){//后台处理界面放行
 			boolean isLoginRequest = servletPath.equalsIgnoreCase("/rest/user/login");
 			if(isLoginRequest){
 				chain.doFilter(hRequest, hResponse);
 			} else if (isUserLogin) {
 				chain.doFilter(hRequest, hResponse);
-			} else {
+			} else {//未登录跳转
 				hResponse.sendRedirect("Login.jsp");
 			}
 		} else {
@@ -95,10 +98,10 @@ public class ClientAccessFilter implements Filter {
 			return false;
 		}
 		long timeDiff = System.currentTimeMillis() - session.getCreationTime();
-		if(timeDiff/100 > (session.getMaxInactiveInterval() + 60)){
+		if(timeDiff/1000 > (session.getMaxInactiveInterval() + 60)){//超时
 			return false;
 		}
-		Object userid = session.getAttribute("login_user");
+		Object userid = session.getAttribute("login_user");//如果用string，没有对象是无法创建此处用object
 		if(userid==null || userid.toString().trim().length()<=0){
 			return false;
 		}

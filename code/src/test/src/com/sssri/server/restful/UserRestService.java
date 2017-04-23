@@ -61,18 +61,18 @@ public class UserRestService {
 	@Path("/login")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public boolean login(@FormParam("userid")String Employee_id, @FormParam("password")String pwd, @Context HttpServletRequest request){
+	public boolean login(@FormParam("userid")int Employee_id, @FormParam("password")String pwd, @Context HttpServletRequest request){
 		SqlSession session = null;
 		try{
 			session = DatabaseUtils.getSessionFactory().openSession();
 			HttpSession httpsession=request.getSession();
 			// 数据库表操作
 			IUserMapper userDAO = session.getMapper(IUserMapper.class);
-			User userInfo = userDAO.selectUserByUserid(Employee_id);
+			User userInfo = userDAO.selectUserByID(Employee_id);
 			if(userInfo == null){
 				return false;
 			}
-			boolean ret= pwd.equals(userInfo.getPassword());
+			boolean ret= pwd.equals(userInfo.getPwd());
 			if(ret) {
 				httpsession.setAttribute("login_user", Employee_id);
 				httpsession.setMaxInactiveInterval(3600);
